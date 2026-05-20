@@ -1,0 +1,48 @@
+# ============ Veri dosyalari (~8.3 GB) ============
+data/raw/
+data/segments/
+data/processed/
+data/mel/
+
+# ============ Drive upload paketi (~7 GB) ============
+drive_upload/
+
+# ============ Model ciktilari ============
+output/models/
+output/logs/
+*.keras
+*.tflite
+*.h5
+
+# ============ Python ============
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+
+# ============ Jupyter ============
+.ipynb_checkpoints/
+
+# ============ IDE ============
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ============ Claude Code ============
+.claude/
+
+# ============ OS ============
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ============ Colab ============
+*.zip

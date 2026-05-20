@@ -1,0 +1,11 @@
+numpy
+scipy
+librosa
+soundfile
+tensorflow==2.15.*
+scikit-learn
+matplotlib
+pandas
+tqdm
+pyyaml
+requests

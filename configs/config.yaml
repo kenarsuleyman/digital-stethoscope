@@ -1,0 +1,92 @@
+paths:
+  raw_data: "data/raw"
+  physionet_dir: "data/raw/physionet"
+  pascal_dir: "data/raw/pascal"
+  metadata_csv: "data/metadata.csv"
+  segments_dir: "data/segments"
+  segments_metadata_csv: "data/segments_metadata.csv"
+  processed_dir: "data/processed"
+  processed_metadata_csv: "data/processed_metadata.csv"
+  rejected_log: "data/rejected_segments.log"
+  mel_dir: "data/mel"
+  mel_metadata_csv: "data/mel_metadata.csv"
+
+downloads:
+  physionet:
+    local_path: "C:/Users/kenar/Desktop/veri/classification-of-heart-sound-recordings-the-physionet-computing-in-cardiology-challenge-2016-1.0.0"
+    training_zip_url: "https://physionet.org/files/challenge-2016/1.0.0/training.zip"
+    training_sets:
+      - "training-a"
+      - "training-b"
+      - "training-c"
+      - "training-d"
+      - "training-e"
+    expected_counts:
+      training-a: 409
+      training-b: 490
+      training-c: 31
+      training-d: 55
+      training-e: 2141
+    sample_rate: 2000
+    label_file: "REFERENCE.csv"
+    label_map:
+      1: "Normal"
+      -1: "Abnormal"
+
+  pascal:
+    base_url: "http://www.peterjbentley.com/heartchallenge/wav"
+    files:
+      - name: "normal"
+        label: "Normal"
+        extract_dir: "normal"
+        expected_count: 320
+      - name: "murmur"
+        label: "Murmur"
+        extract_dir: "murmur"
+        expected_count: 95
+      - name: "extrastole"
+        label: "Extrasystole"
+        extract_dir: "extrastole"
+        expected_count: 46
+    sample_rate: 4000
+
+labels:
+  binary_map:
+    Normal: 0
+    Abnormal: 1
+    Murmur: 1
+    Extrasystole: 1
+
+# Parameters for later stages
+preprocessing:
+  target_sr: 4000
+  segment_length_s: 5
+  bandpass_low: 25
+  bandpass_high: 900
+  butterworth_order: 4
+  rms_low_factor: 0.1
+  rms_high_factor: 10.0
+
+mel_spectrogram:
+  n_fft: 512
+  hop_length: 256
+  n_mels: 64
+  fmin: 25
+  fmax: 900
+  image_size: [224, 224]
+
+training:
+  stage1:
+    optimizer: "adam"
+    learning_rate: 0.001
+    epochs: 10
+    base_frozen: true
+  stage2:
+    optimizer: "adam"
+    learning_rate: 0.00001
+    epochs: 30
+    unfreeze_blocks: 4
+  batch_size: 32
+  early_stopping_patience: 7
+  reduce_lr_patience: 3
+  reduce_lr_factor: 0.5
