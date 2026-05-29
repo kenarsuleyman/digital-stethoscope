@@ -19,6 +19,8 @@ from pathlib import Path
 
 import numpy as np
 import soundfile as sf
+from fractions import Fraction
+
 from scipy.signal import resample_poly
 import yaml
 from tqdm import tqdm
@@ -96,10 +98,13 @@ def resample_and_segment(config: dict, project_root: Path,
                 stats["skipped_error"] += 1
                 continue
 
-            if source == "physionet":
-                n_frames = n_frames * 2  # resample_poly up=2
+            if sr != target_sr:
+                n_frames = int(n_frames * target_sr / sr)  # post-resample length
 
             n_seg = n_frames // segment_samples
+            # short clips (>=1 s of signal) are zero-padded to a single segment
+            if n_seg == 0 and n_frames >= target_sr:
+                n_seg = 1
             if n_seg == 0:
                 stats["skipped_short"] += 1
             else:
@@ -118,24 +123,37 @@ def resample_and_segment(config: dict, project_root: Path,
             stats["skipped_error"] += 1
             continue
 
-        # Resample PhysioNet 2000 → 4000
+        # Mono-mix any multichannel input (new datasets may be stereo)
+        if audio.ndim > 1:
+            audio = audio.mean(axis=1)
+
+        # Resample to target_sr. PhysioNet (2k->4k) and PASCAL (native 4k) keep
+        # their exact, thesis-reproducible behavior; new sources use a general
+        # rational resampler.
         if source == "physionet":
             if sr != 2000:
                 logger.warning(f"Unexpected SR {sr} for PhysioNet file {wav_path}, skipping")
                 stats["skipped_error"] += 1
                 continue
             audio = resample_poly(audio, up=2, down=1)
-        else:
+        elif source == "pascal":
             if sr != 4000:
                 logger.warning(f"Unexpected SR {sr} for PASCAL file {wav_path}, skipping")
                 stats["skipped_error"] += 1
                 continue
+        elif sr != target_sr:
+            frac = Fraction(target_sr, sr).limit_denominator(1000)
+            audio = resample_poly(audio, up=frac.numerator, down=frac.denominator)
 
-        # Segment
+        # Segment. Recordings shorter than one segment but holding >=1 s of
+        # signal (e.g. Yaseen ~2-3 s clips) are zero-padded to a single segment
+        # rather than dropped.
+        if len(audio) < segment_samples:
+            if len(audio) < target_sr:
+                stats["skipped_short"] += 1
+                continue
+            audio = np.pad(audio, (0, segment_samples - len(audio)))
         n_segments = len(audio) // segment_samples
-        if n_segments == 0:
-            stats["skipped_short"] += 1
-            continue
 
         for seg_idx in range(n_segments):
             start = seg_idx * segment_samples

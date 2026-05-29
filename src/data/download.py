@@ -355,8 +355,116 @@ def _parse_pascal_metadata(pascal_dir: Path, config: dict) -> list[dict]:
     return rows
 
 
+def _parse_yaseen_metadata(config: dict) -> list[dict]:
+    """Yaseen 2018: class subfolders, 8 kHz, ~2-3 s clips. N=Normal else Abnormal."""
+    yc = config["downloads"].get("yaseen")
+    if not yc:
+        return []
+    root = Path(yc["local_path"])
+    if not root.exists():
+        logger.warning(f"Yaseen local_path not found: {root}, skipping")
+        return []
+    binary_map = config["labels"]["binary_map"]
+    sr = yc["sample_rate"]
+    rows = []
+    for subdir, label in yc["class_dirs"].items():
+        cls_dir = root / subdir
+        if not cls_dir.exists():
+            logger.warning(f"Yaseen class dir missing: {cls_dir}")
+            continue
+        for wav in sorted(cls_dir.glob("*.wav")):
+            rows.append({
+                "file_path": wav.resolve().as_posix(),
+                "dataset_source": "yaseen",
+                "original_sr": sr,
+                "original_label": label,
+                "binary_label": binary_map[label],
+                "patient_id": f"yaseen_{wav.stem}",
+            })
+    return rows
+
+
+def _parse_buet_metadata(config: dict) -> list[dict]:
+    """BUET BMD-HS: per-patient multi-label train.csv, 4 kHz, 20 s, 8 recs/patient."""
+    bc = config["downloads"].get("buet")
+    if not bc:
+        return []
+    root = Path(bc["local_path"])
+    csv_path = root / bc["label_csv"]
+    wav_dir = root / bc["wav_subdir"]
+    if not csv_path.exists():
+        logger.warning(f"BUET label csv not found: {csv_path}, skipping")
+        return []
+    sr = bc["sample_rate"]
+    rows = []
+    with open(csv_path, "r", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            is_normal = str(r.get("N", "0")).strip() == "1"
+            label = "Normal" if is_normal else "Abnormal"
+            pid = f"buet_{r['patient_id']}"
+            for k in [c for c in r if c.startswith("recording_")]:
+                rec = (r[k] or "").strip()
+                if not rec:
+                    continue
+                wav = wav_dir / f"{rec}.wav"
+                if not wav.exists():
+                    continue
+                rows.append({
+                    "file_path": wav.resolve().as_posix(),
+                    "dataset_source": "buet",
+                    "original_sr": sr,
+                    "original_label": label,
+                    "binary_label": 0 if is_normal else 1,
+                    "patient_id": pid,
+                })
+    return rows
+
+
+def _parse_circor_metadata(config: dict) -> list[dict]:
+    """CirCor DigiScope: patient-level Murmur label, 4 kHz, multiple locations/patient."""
+    cc = config["downloads"].get("circor")
+    if not cc:
+        return []
+    root = Path(cc["local_path"])
+    if not root.exists():
+        logger.warning(f"CirCor local_path not found: {root}, skipping")
+        return []
+    # The zip extracts to a versioned subfolder; locate the label csv + wav dir.
+    csvs = list(root.rglob("training_data.csv"))
+    if not csvs:
+        logger.warning(f"CirCor training_data.csv not found under {root}, skipping")
+        return []
+    csv_path = csvs[0]
+    wav_dir = csv_path.parent / "training_data"
+    if not wav_dir.exists():
+        wav_dir = csv_path.parent
+    sr = cc["sample_rate"]
+    murmur_map = {"Present": 1, "Absent": 0}  # "Unknown" -> dropped
+    rows = []
+    with open(csv_path, "r", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            murmur = (r.get("Murmur") or "").strip()
+            if murmur not in murmur_map:
+                continue
+            binary = murmur_map[murmur]
+            label = "Abnormal" if binary else "Normal"
+            pid_raw = (r.get("Patient ID") or r.get("Patient_ID") or "").strip()
+            if not pid_raw:
+                continue
+            for wav in sorted(wav_dir.glob(f"{pid_raw}_*.wav")):
+                rows.append({
+                    "file_path": wav.resolve().as_posix(),
+                    "dataset_source": "circor",
+                    "original_sr": sr,
+                    "original_label": label,
+                    "binary_label": binary,
+                    "patient_id": f"circor_{pid_raw}",
+                })
+    return rows
+
+
 def generate_metadata(config: dict, project_root: Path) -> Path:
-    """Combine PhysioNet and PASCAL metadata into a single CSV."""
+    """Combine all dataset metadata into a single CSV."""
     physionet_dir = project_root / config["paths"]["physionet_dir"]
     pascal_dir = project_root / config["paths"]["pascal_dir"]
     metadata_path = project_root / config["paths"]["metadata_csv"]
@@ -364,8 +472,12 @@ def generate_metadata(config: dict, project_root: Path) -> Path:
     logger.info("Generating metadata...")
     pn_rows = _parse_physionet_metadata(physionet_dir, config)
     ps_rows = _parse_pascal_metadata(pascal_dir, config)
+    ya_rows = _parse_yaseen_metadata(config)
+    bu_rows = _parse_buet_metadata(config)
+    ci_rows = _parse_circor_metadata(config)
 
-    all_rows = sorted(pn_rows + ps_rows, key=lambda r: (r["dataset_source"], r["file_path"]))
+    all_rows = sorted(pn_rows + ps_rows + ya_rows + bu_rows + ci_rows,
+                      key=lambda r: (r["dataset_source"], r["file_path"]))
 
     metadata_path.parent.mkdir(parents=True, exist_ok=True)
     fieldnames = ["file_path", "dataset_source", "original_sr", "original_label",
@@ -377,17 +489,17 @@ def generate_metadata(config: dict, project_root: Path) -> Path:
         writer.writerows(all_rows)
 
     # Print summary
-    pn_count = len(pn_rows)
-    ps_count = len(ps_rows)
     total = len(all_rows)
     normal = sum(1 for r in all_rows if r["binary_label"] == 0)
     abnormal = sum(1 for r in all_rows if r["binary_label"] == 1)
 
     logger.info(f"Metadata written to {metadata_path}")
-    logger.info(f"  PhysioNet: {pn_count} recordings")
-    logger.info(f"  PASCAL:    {ps_count} recordings")
-    logger.info(f"  Total:     {total} recordings")
-    logger.info(f"  Normal:    {normal}  |  Abnormal: {abnormal}")
+    for src, rs in [("PhysioNet", pn_rows), ("PASCAL", ps_rows),
+                    ("Yaseen", ya_rows), ("BUET", bu_rows), ("CirCor", ci_rows)]:
+        n = sum(1 for r in rs if r["binary_label"] == 0)
+        a = sum(1 for r in rs if r["binary_label"] == 1)
+        logger.info(f"  {src:<10}: {len(rs):>5} recordings  (Normal {n}, Abnormal {a})")
+    logger.info(f"  {'Total':<10}: {total:>5} recordings  (Normal {normal}, Abnormal {abnormal})")
 
     return metadata_path
 

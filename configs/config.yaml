@@ -50,6 +50,28 @@ downloads:
         expected_count: 46
     sample_rate: 4000
 
+  # --- Added datasets for cross-domain robustness (training only) ---
+  yaseen:
+    local_path: "C:/Users/kenar/Desktop/yaseen-samples"
+    sample_rate: 8000
+    class_dirs:                 # subfolder -> original label
+      "N_New_3주기": "Normal"
+      "AS_New_3주기": "Abnormal"
+      "MR_New_3주기": "Abnormal"
+      "MS_New_3주기": "Abnormal"
+      "MVP_New_3주기": "Abnormal"
+
+  buet:
+    local_path: "C:/Users/kenar/Desktop/veri/buet"
+    wav_subdir: "train"
+    label_csv: "train.csv"      # per-patient multi-label; N==1 -> Normal
+    sample_rate: 4000
+
+  circor:
+    local_path: "C:/Users/kenar/Desktop/veri/circor"
+    sample_rate: 4000
+    # Murmur: Present -> Abnormal, Absent -> Normal, Unknown -> dropped
+
 labels:
   binary_map:
     Normal: 0
