@@ -232,11 +232,100 @@ def generate_figures(config: dict, project_root: Path):
     logger.info(f"Saved: {path}")
 
 
+def generate_pairwise_figures(config: dict, project_root: Path):
+    """Generate four figures, each pairing the original Mel spectrogram with one
+    augmentation method side by side (original | augmented)."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    sns.set_theme(style="white", palette="colorblind", font_scale=1.0)
+    plt.rcParams["font.family"] = "DejaVu Sans"
+
+    mel_config = config["mel_spectrogram"]
+    target_sr = config["preprocessing"]["target_sr"]
+    hop = mel_config["hop_length"]
+    figures_dir = project_root / "figures"
+    figures_dir.mkdir(parents=True, exist_ok=True)
+
+    # Pick one processed segment (abnormal for more visual interest)
+    processed_meta_path = project_root / config["paths"]["processed_metadata_csv"]
+    with open(processed_meta_path, "r", encoding="utf-8") as f:
+        rows = list(csv.DictReader(f))
+    example_row = next(r for r in rows if r["binary_label"] == "1")
+    audio, sr = sf.read(project_root / example_row["segment_path"], dtype="float64")
+
+    def compute_mel_norm(audio_in):
+        S = librosa.feature.melspectrogram(
+            y=audio_in, sr=sr,
+            n_fft=mel_config["n_fft"],
+            hop_length=mel_config["hop_length"],
+            n_mels=mel_config["n_mels"],
+            fmin=mel_config["fmin"],
+            fmax=mel_config["fmax"],
+        )
+        S_db = librosa.power_to_db(S, ref=np.max)
+        s_min, s_max = S_db.min(), S_db.max()
+        if s_max - s_min > 0:
+            return (S_db - s_min) / (s_max - s_min)
+        return np.zeros_like(S_db)
+
+    # Original (shared across all four figures)
+    np.random.seed(42)
+    mel_orig = compute_mel_norm(audio)
+
+    # Build the augmented Mel for each method.
+    # For the figure we use deterministic values at (or near) the edge of each
+    # augmentation's real range so the effect is clearly visible — a random draw
+    # near the middle of the range (e.g. a 0.03 s shift or a 1.05x scale) is
+    # technically correct but visually indistinguishable from the original.
+    audio_shifted = np.zeros_like(audio)        # fixed +1000-sample (0.25 s) shift
+    audio_shifted[1000:] = audio[:-1000]
+    mel_shifted = compute_mel_norm(audio_shifted)
+    mel_tmask = time_mask(mel_orig, min_steps=8, max_steps=12)
+    mel_fmask = freq_mask(mel_orig, min_bands=4, max_bands=6)
+    mel_amp = np.clip(mel_orig * 0.8, 0.0, 1.0)  # low extreme of U(0.8, 1.2)
+
+    # (filename, augmented mel, augmented-panel title)
+    specs = [
+        ("fig_aug_time_shift.png",      mel_shifted, "Zaman Kaydırma"),
+        ("fig_aug_time_mask.png",       mel_tmask,   "Zaman Maskeleme"),
+        ("fig_aug_freq_mask.png",       mel_fmask,   "Frekans Maskeleme"),
+        ("fig_aug_amplitude_scale.png", mel_amp,     "Genlik Ölçekleme"),
+    ]
+
+    for fname, mel_aug, aug_title in specs:
+        fig, axes = plt.subplots(1, 2, figsize=(10, 4), sharey=True)
+        for ax, mel, title in zip(axes, [mel_orig, mel_aug],
+                                  ["Orijinal", aug_title]):
+            librosa.display.specshow(
+                mel, sr=target_sr, hop_length=hop,
+                x_axis="time", y_axis="mel",
+                fmin=mel_config["fmin"], fmax=mel_config["fmax"],
+                ax=ax, cmap="magma", vmin=0, vmax=1,
+            )
+            ax.set_title(title, fontsize=12, fontweight="bold")
+            ax.set_xlabel("Zaman (s)", fontsize=10)
+            if ax != axes[0]:
+                ax.set_ylabel("")
+        axes[0].set_ylabel("Frekans (Hz)", fontsize=10)
+        fig.suptitle(f"Veri Artırma — {aug_title}",
+                     fontsize=14, fontweight="bold", y=1.02)
+        plt.tight_layout()
+        path = figures_dir / fname
+        plt.savefig(path, dpi=300, bbox_inches="tight")
+        plt.close()
+        logger.info(f"Saved: {path}")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Augmentation pipeline & figure generation")
     parser.add_argument("--config", type=Path, default=None)
     parser.add_argument("--figures-only", action="store_true",
-                        help="Generate thesis figure")
+                        help="Generate combined thesis figure")
+    parser.add_argument("--pairwise-figures", action="store_true",
+                        help="Generate four side-by-side original/augmented figures")
     args = parser.parse_args()
 
     logging.basicConfig(
@@ -246,6 +335,10 @@ def main():
     )
 
     config = load_config(args.config)
+
+    if args.pairwise_figures:
+        generate_pairwise_figures(config, PROJECT_ROOT)
+        return
 
     if args.figures_only:
         generate_figures(config, PROJECT_ROOT)

@@ -1,0 +1,497 @@
+{
+  "generated_at": "2026-05-30T20:52:55.776Z",
+  "device": {
+    "os": "android",
+    "model": "SM-S906E",
+    "brand": "samsung",
+    "manufacturer": "samsung",
+    "android_release": "16",
+    "android_api_level": 36,
+    "total_ram_bytes": 7571623936,
+    "total_ram_gb": 7.052,
+    "avail_ram_bytes": 2592546816,
+    "cpu_cores": 8,
+    "tflite_backend": "CPU — TFLite default delegate (XNNPACK for float ops)",
+    "tflite_delegates_requested": "[] (default CPU)",
+    "tflite_threads": "TFLite default",
+    "model_file_size_bytes": 4468340
+  },
+  "parity": {
+    "n_files": 26,
+    "mean_prob_MAE": 0.046,
+    "mean_prob_maxAbsErr": 0.345,
+    "per_segment_MAE": 0.062,
+    "class_agreement_pct": 100,
+    "truth_accuracy_pct": 88.462,
+    "per_file": [
+      {
+        "file": "01_buet_normal_buet_patient_101_N_101_sup_Mit_003.wav",
+        "rn_mean_prob": 0.032,
+        "python_mean_prob": 0.006,
+        "mean_abs_err": 0.025,
+        "rn_per_segment": [
+          0.032
+        ],
+        "python_per_segment": [
+          0.006
+        ],
+        "rn_n_segments": 1,
+        "python_n_segments": 1,
+        "rn_class": "normal",
+        "python_class": "normal",
+        "truth_class": "normal"
+      },
+      {
+        "file": "02_buet_normal_buet_patient_101_N_101_sup_Pul_001.wav",
+        "rn_mean_prob": 0.403,
+        "python_mean_prob": 0.304,
+        "mean_abs_err": 0.1,
+        "rn_per_segment": [
+          0.403
+        ],
+        "python_per_segment": [
+          0.304
+        ],
+        "rn_n_segments": 1,
+        "python_n_segments": 1,
+        "rn_class": "normal",
+        "python_class": "normal",
+        "truth_class": "normal"
+      },
+      {
+        "file": "03_buet_abnormal_buet_patient_045_MD_045_sit_Aor_000.wav",
+        "rn_mean_prob": 0.997,
+        "python_mean_prob": 0.999,
+        "mean_abs_err": 0.002,
+        "rn_per_segment": [
+          0.997
+        ],
+        "python_per_segment": [
+          0.999
+        ],
+        "rn_n_segments": 1,
+        "python_n_segments": 1,
+        "rn_class": "abnormal",
+        "python_class": "abnormal",
+        "truth_class": "abnormal"
+      },
+      {
+        "file": "04_buet_abnormal_buet_patient_039_MD_039_sup_Aor_000.wav",
+        "rn_mean_prob": 1,
+        "python_mean_prob": 1,
+        "mean_abs_err": 0,
+        "rn_per_segment": [
+          1
+        ],
+        "python_per_segment": [
+          1
+        ],
+        "rn_n_segments": 1,
+        "python_n_segments": 1,
+        "rn_class": "abnormal",
+        "python_class": "abnormal",
+        "truth_class": "abnormal"
+      },
+      {
+        "file": "05_circor_normal_circor_84733_84733_TV_000.wav",
+        "rn_mean_prob": 0.146,
+        "python_mean_prob": 0.174,
+        "mean_abs_err": 0.028,
+        "rn_per_segment": [
+          0.146
+        ],
+        "python_per_segment": [
+          0.174
+        ],
+        "rn_n_segments": 1,
+        "python_n_segments": 1,
+        "rn_class": "normal",
+        "python_class": "normal",
+        "truth_class": "normal"
+      },
+      {
+        "file": "06_circor_normal_circor_84733_84733_PV_000.wav",
+        "rn_mean_prob": 0.194,
+        "python_mean_prob": 0.129,
+        "mean_abs_err": 0.065,
+        "rn_per_segment": [
+          0.194
+        ],
+        "python_per_segment": [
+          0.129
+        ],
+        "rn_n_segments": 1,
+        "python_n_segments": 1,
+        "rn_class": "normal",
+        "python_class": "normal",
+        "truth_class": "normal"
+      },
+      {
+        "file": "07_circor_abnormal_circor_84692_84692_MV_002.wav",
+        "rn_mean_prob": 0.995,
+        "python_mean_prob": 0.993,
+        "mean_abs_err": 0.002,
+        "rn_per_segment": [
+          0.995
+        ],
+        "python_per_segment": [
+          0.993
+        ],
+        "rn_n_segments": 1,
+        "python_n_segments": 1,
+        "rn_class": "abnormal",
+        "python_class": "abnormal",
+        "truth_class": "abnormal"
+      },
+      {
+        "file": "08_circor_abnormal_circor_85024_85024_AV_003.wav",
+        "rn_mean_prob": 0.802,
+        "python_mean_prob": 0.692,
+        "mean_abs_err": 0.11,
+        "rn_per_segment": [
+          0.802
+        ],
+        "python_per_segment": [
+          0.692
+        ],
+        "rn_n_segments": 1,
+        "python_n_segments": 1,
+        "rn_class": "abnormal",
+        "python_class": "abnormal",
+        "truth_class": "abnormal"
+      },
+      {
+        "file": "09_other_normal_206_normal__206_1308159601959_C_000.wav",
+        "rn_mean_prob": 0.008,
+        "python_mean_prob": 0.004,
+        "mean_abs_err": 0.004,
+        "rn_per_segment": [
+          0.008
+        ],
+        "python_per_segment": [
+          0.004
+        ],
+        "rn_n_segments": 1,
+        "python_n_segments": 1,
+        "rn_class": "normal",
+        "python_class": "normal",
+        "truth_class": "normal"
+      },
+      {
+        "file": "10_other_normal_123_normal_noisynormal_123_1306331925797_C_000.wav",
+        "rn_mean_prob": 0.081,
+        "python_mean_prob": 0.111,
+        "mean_abs_err": 0.029,
+        "rn_per_segment": [
+          0.081
+        ],
+        "python_per_segment": [
+          0.111
+        ],
+        "rn_n_segments": 1,
+        "python_n_segments": 1,
+        "rn_class": "normal",
+        "python_class": "normal",
+        "truth_class": "normal"
+      },
+      {
+        "file": "11_other_abnormal_245_murmur__245_1309200438094_B_000.wav",
+        "rn_mean_prob": 0.752,
+        "python_mean_prob": 0.923,
+        "mean_abs_err": 0.17,
+        "rn_per_segment": [
+          0.752
+        ],
+        "python_per_segment": [
+          0.923
+        ],
+        "rn_n_segments": 1,
+        "python_n_segments": 1,
+        "rn_class": "abnormal",
+        "python_class": "abnormal",
+        "truth_class": "abnormal"
+      },
+      {
+        "file": "12_other_abnormal_248_murmur__248_1309201683806_A_000.wav",
+        "rn_mean_prob": 0.916,
+        "python_mean_prob": 0.938,
+        "mean_abs_err": 0.021,
+        "rn_per_segment": [
+          0.916
+        ],
+        "python_per_segment": [
+          0.938
+        ],
+        "rn_n_segments": 1,
+        "python_n_segments": 1,
+        "rn_class": "abnormal",
+        "python_class": "abnormal",
+        "truth_class": "abnormal"
+      },
+      {
+        "file": "13_physionet_normal_c0026_c0026_004.wav",
+        "rn_mean_prob": 0.52,
+        "python_mean_prob": 0.865,
+        "mean_abs_err": 0.345,
+        "rn_per_segment": [
+          0.52
+        ],
+        "python_per_segment": [
+          0.865
+        ],
+        "rn_n_segments": 1,
+        "python_n_segments": 1,
+        "rn_class": "abnormal",
+        "python_class": "abnormal",
+        "truth_class": "normal"
+      },
+      {
+        "file": "14_physionet_normal_c0009_c0009_005.wav",
+        "rn_mean_prob": 0.05,
+        "python_mean_prob": 0.07,
+        "mean_abs_err": 0.02,
+        "rn_per_segment": [
+          0.05
+        ],
+        "python_per_segment": [
+          0.07
+        ],
+        "rn_n_segments": 1,
+        "python_n_segments": 1,
+        "rn_class": "normal",
+        "python_class": "normal",
+        "truth_class": "normal"
+      },
+      {
+        "file": "15_physionet_abnormal_e01418_e01418_005.wav",
+        "rn_mean_prob": 0.993,
+        "python_mean_prob": 0.999,
+        "mean_abs_err": 0.006,
+        "rn_per_segment": [
+          0.993
+        ],
+        "python_per_segment": [
+          0.999
+        ],
+        "rn_n_segments": 1,
+        "python_n_segments": 1,
+        "rn_class": "abnormal",
+        "python_class": "abnormal",
+        "truth_class": "abnormal"
+      },
+      {
+        "file": "16_physionet_abnormal_e00378_e00378_001.wav",
+        "rn_mean_prob": 1,
+        "python_mean_prob": 1,
+        "mean_abs_err": 0,
+        "rn_per_segment": [
+          1
+        ],
+        "python_per_segment": [
+          1
+        ],
+        "rn_n_segments": 1,
+        "python_n_segments": 1,
+        "rn_class": "abnormal",
+        "python_class": "abnormal",
+        "truth_class": "abnormal"
+      },
+      {
+        "file": "17_yaseen_normal_yaseen_New_N_112_New_N_112_000.wav",
+        "rn_mean_prob": 0,
+        "python_mean_prob": 0.001,
+        "mean_abs_err": 0,
+        "rn_per_segment": [
+          0
+        ],
+        "python_per_segment": [
+          0.001
+        ],
+        "rn_n_segments": 1,
+        "python_n_segments": 1,
+        "rn_class": "normal",
+        "python_class": "normal",
+        "truth_class": "normal"
+      },
+      {
+        "file": "18_yaseen_normal_yaseen_New_N_055_New_N_055_000.wav",
+        "rn_mean_prob": 0.001,
+        "python_mean_prob": 0.004,
+        "mean_abs_err": 0.002,
+        "rn_per_segment": [
+          0.001
+        ],
+        "python_per_segment": [
+          0.004
+        ],
+        "rn_n_segments": 1,
+        "python_n_segments": 1,
+        "rn_class": "normal",
+        "python_class": "normal",
+        "truth_class": "normal"
+      },
+      {
+        "file": "19_yaseen_abnormal_yaseen_New_MR_128_New_MR_128_000.wav",
+        "rn_mean_prob": 1,
+        "python_mean_prob": 1,
+        "mean_abs_err": 0,
+        "rn_per_segment": [
+          1
+        ],
+        "python_per_segment": [
+          1
+        ],
+        "rn_n_segments": 1,
+        "python_n_segments": 1,
+        "rn_class": "abnormal",
+        "python_class": "abnormal",
+        "truth_class": "abnormal"
+      },
+      {
+        "file": "20_yaseen_abnormal_yaseen_New_MVP_139_New_MVP_139_000.wav",
+        "rn_mean_prob": 1,
+        "python_mean_prob": 1,
+        "mean_abs_err": 0,
+        "rn_per_segment": [
+          1
+        ],
+        "python_per_segment": [
+          1
+        ],
+        "rn_n_segments": 1,
+        "python_n_segments": 1,
+        "rn_class": "abnormal",
+        "python_class": "abnormal",
+        "truth_class": "abnormal"
+      },
+      {
+        "file": "21_heart-sounds-public_normal_Normal.wav",
+        "rn_mean_prob": 0.066,
+        "python_mean_prob": 0.094,
+        "mean_abs_err": 0.028,
+        "rn_per_segment": [
+          0.092,
+          0.041
+        ],
+        "python_per_segment": [
+          0.108,
+          0.08
+        ],
+        "rn_n_segments": 2,
+        "python_n_segments": 2,
+        "rn_class": "normal",
+        "python_class": "normal",
+        "truth_class": "normal"
+      },
+      {
+        "file": "22_heart-sounds-public_abnormal_Aortic-Stenosis.wav",
+        "rn_mean_prob": 0.864,
+        "python_mean_prob": 0.778,
+        "mean_abs_err": 0.086,
+        "rn_per_segment": [
+          0.885,
+          0.843
+        ],
+        "python_per_segment": [
+          0.865,
+          0.691
+        ],
+        "rn_n_segments": 2,
+        "python_n_segments": 2,
+        "rn_class": "abnormal",
+        "python_class": "abnormal",
+        "truth_class": "abnormal"
+      },
+      {
+        "file": "23_heart-sounds-public_abnormal_Aortic-Regurgitation.wav",
+        "rn_mean_prob": 0.019,
+        "python_mean_prob": 0.024,
+        "mean_abs_err": 0.005,
+        "rn_per_segment": [
+          0.029,
+          0.009
+        ],
+        "python_per_segment": [
+          0.029,
+          0.019
+        ],
+        "rn_n_segments": 2,
+        "python_n_segments": 2,
+        "rn_class": "normal",
+        "python_class": "normal",
+        "truth_class": "abnormal"
+      },
+      {
+        "file": "24_heart-sounds-public_abnormal_Mitral-Regurgitation.wav",
+        "rn_mean_prob": 0.268,
+        "python_mean_prob": 0.258,
+        "mean_abs_err": 0.011,
+        "rn_per_segment": [
+          0.298,
+          0.239
+        ],
+        "python_per_segment": [
+          0.446,
+          0.069
+        ],
+        "rn_n_segments": 2,
+        "python_n_segments": 2,
+        "rn_class": "normal",
+        "python_class": "normal",
+        "truth_class": "abnormal"
+      },
+      {
+        "file": "25_heart-sounds-public_abnormal_Mitral-Stenosis.wav",
+        "rn_mean_prob": 0.731,
+        "python_mean_prob": 0.72,
+        "mean_abs_err": 0.01,
+        "rn_per_segment": [
+          0.81,
+          0.651
+        ],
+        "python_per_segment": [
+          0.832,
+          0.609
+        ],
+        "rn_n_segments": 2,
+        "python_n_segments": 2,
+        "rn_class": "abnormal",
+        "python_class": "abnormal",
+        "truth_class": "abnormal"
+      },
+      {
+        "file": "26_heart-sounds-public_abnormal_Pulmonary-stenosis.wav",
+        "rn_mean_prob": 0.844,
+        "python_mean_prob": 0.704,
+        "mean_abs_err": 0.139,
+        "rn_per_segment": [
+          0.798,
+          0.89
+        ],
+        "python_per_segment": [
+          0.872,
+          0.536
+        ],
+        "rn_n_segments": 2,
+        "python_n_segments": 2,
+        "rn_class": "abnormal",
+        "python_class": "abnormal",
+        "truth_class": "abnormal"
+      }
+    ]
+  },
+  "latency": {
+    "segment_file": "21_heart-sounds-public_normal_Normal.wav",
+    "n_warm_runs": 99,
+    "cold_total_ms": 386.936,
+    "cold_pre_ms": 368.115,
+    "cold_inf_ms": 18.821,
+    "warm_total_mean_ms": 396.724,
+    "warm_total_std_ms": 8.599,
+    "warm_total_p50_ms": 394.928,
+    "warm_total_p95_ms": 416.064,
+    "warm_preprocess_mean_ms": 377.873,
+    "warm_inference_mean_ms": 18.851,
+    "warm_inference_p95_ms": 22.035
+  }
+}
