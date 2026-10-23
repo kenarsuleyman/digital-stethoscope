@@ -29,9 +29,9 @@ downloads:
       training-e: 2141
     sample_rate: 2000
     label_file: "REFERENCE.csv"
-    label_map:
-      1: "Normal"
-      -1: "Abnormal"
+    label_map:            # PhysioNet 2016 REFERENCE.csv: 1 = abnormal, -1 = normal
+      1: "Abnormal"
+      -1: "Normal"
 
   pascal:
     base_url: "http://www.peterjbentley.com/heartchallenge/wav"
