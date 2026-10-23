@@ -1,0 +1,457 @@
+{
+  "model_path": "C:\\Users\\kenar\\dev\\models\\heart_sound_classifier_fp16_v2.tflite",
+  "model_sha1": "0c360a8f6706c675a5eedd8615052f09f96abf1a",
+  "threshold": 0.5,
+  "n_files": 26,
+  "agreement_with_truth": 0.8846153846153846,
+  "items": [
+    {
+      "rn_filename": "01_buet_normal_buet_patient_101_N_101_sup_Mit_003.wav",
+      "source": "buet",
+      "origin": "test_split",
+      "patient_id": "buet_patient_101",
+      "truth_label": 0,
+      "truth_class": "normal",
+      "src_sample_rate": 4000,
+      "n_segments": 1,
+      "python_per_segment": [
+        0.2769
+      ],
+      "python_mean_prob": 0.2769,
+      "python_class": "normal",
+      "correct": true,
+      "label_fixed": false
+    },
+    {
+      "rn_filename": "02_buet_normal_buet_patient_101_N_101_sup_Pul_001.wav",
+      "source": "buet",
+      "origin": "test_split",
+      "patient_id": "buet_patient_101",
+      "truth_label": 0,
+      "truth_class": "normal",
+      "src_sample_rate": 4000,
+      "n_segments": 1,
+      "python_per_segment": [
+        0.5428
+      ],
+      "python_mean_prob": 0.5428,
+      "python_class": "abnormal",
+      "correct": false,
+      "label_fixed": false
+    },
+    {
+      "rn_filename": "03_buet_abnormal_buet_patient_045_MD_045_sit_Aor_000.wav",
+      "source": "buet",
+      "origin": "test_split",
+      "patient_id": "buet_patient_045",
+      "truth_label": 1,
+      "truth_class": "abnormal",
+      "src_sample_rate": 4000,
+      "n_segments": 1,
+      "python_per_segment": [
+        0.9976
+      ],
+      "python_mean_prob": 0.9976,
+      "python_class": "abnormal",
+      "correct": true,
+      "label_fixed": false
+    },
+    {
+      "rn_filename": "04_buet_abnormal_buet_patient_039_MD_039_sup_Aor_000.wav",
+      "source": "buet",
+      "origin": "test_split",
+      "patient_id": "buet_patient_039",
+      "truth_label": 1,
+      "truth_class": "abnormal",
+      "src_sample_rate": 4000,
+      "n_segments": 1,
+      "python_per_segment": [
+        1.0
+      ],
+      "python_mean_prob": 1.0,
+      "python_class": "abnormal",
+      "correct": true,
+      "label_fixed": false
+    },
+    {
+      "rn_filename": "05_circor_normal_circor_84733_84733_TV_000.wav",
+      "source": "circor",
+      "origin": "test_split",
+      "patient_id": "circor_84733",
+      "truth_label": 0,
+      "truth_class": "normal",
+      "src_sample_rate": 4000,
+      "n_segments": 1,
+      "python_per_segment": [
+        0.1136
+      ],
+      "python_mean_prob": 0.1136,
+      "python_class": "normal",
+      "correct": true,
+      "label_fixed": false
+    },
+    {
+      "rn_filename": "06_circor_normal_circor_84733_84733_PV_000.wav",
+      "source": "circor",
+      "origin": "test_split",
+      "patient_id": "circor_84733",
+      "truth_label": 0,
+      "truth_class": "normal",
+      "src_sample_rate": 4000,
+      "n_segments": 1,
+      "python_per_segment": [
+        0.0572
+      ],
+      "python_mean_prob": 0.0572,
+      "python_class": "normal",
+      "correct": true,
+      "label_fixed": false
+    },
+    {
+      "rn_filename": "07_circor_abnormal_circor_84692_84692_MV_002.wav",
+      "source": "circor",
+      "origin": "test_split",
+      "patient_id": "circor_84692",
+      "truth_label": 1,
+      "truth_class": "abnormal",
+      "src_sample_rate": 4000,
+      "n_segments": 1,
+      "python_per_segment": [
+        0.8831
+      ],
+      "python_mean_prob": 0.8831,
+      "python_class": "abnormal",
+      "correct": true,
+      "label_fixed": false
+    },
+    {
+      "rn_filename": "08_circor_abnormal_circor_85024_85024_AV_003.wav",
+      "source": "circor",
+      "origin": "test_split",
+      "patient_id": "circor_85024",
+      "truth_label": 1,
+      "truth_class": "abnormal",
+      "src_sample_rate": 4000,
+      "n_segments": 1,
+      "python_per_segment": [
+        0.3802
+      ],
+      "python_mean_prob": 0.3802,
+      "python_class": "normal",
+      "correct": false,
+      "label_fixed": false
+    },
+    {
+      "rn_filename": "09_other_normal_206_normal__206_1308159601959_C_000.wav",
+      "source": "other",
+      "origin": "test_split",
+      "patient_id": "206",
+      "truth_label": 0,
+      "truth_class": "normal",
+      "src_sample_rate": 4000,
+      "n_segments": 1,
+      "python_per_segment": [
+        0.0705
+      ],
+      "python_mean_prob": 0.0705,
+      "python_class": "normal",
+      "correct": true,
+      "label_fixed": false
+    },
+    {
+      "rn_filename": "10_other_normal_123_normal_noisynormal_123_1306331925797_C_000.wav",
+      "source": "other",
+      "origin": "test_split",
+      "patient_id": "123",
+      "truth_label": 0,
+      "truth_class": "normal",
+      "src_sample_rate": 4000,
+      "n_segments": 1,
+      "python_per_segment": [
+        0.1429
+      ],
+      "python_mean_prob": 0.1429,
+      "python_class": "normal",
+      "correct": true,
+      "label_fixed": false
+    },
+    {
+      "rn_filename": "11_other_abnormal_245_murmur__245_1309200438094_B_000.wav",
+      "source": "other",
+      "origin": "test_split",
+      "patient_id": "245",
+      "truth_label": 1,
+      "truth_class": "abnormal",
+      "src_sample_rate": 4000,
+      "n_segments": 1,
+      "python_per_segment": [
+        0.8675
+      ],
+      "python_mean_prob": 0.8675,
+      "python_class": "abnormal",
+      "correct": true,
+      "label_fixed": false
+    },
+    {
+      "rn_filename": "12_other_abnormal_248_murmur__248_1309201683806_A_000.wav",
+      "source": "other",
+      "origin": "test_split",
+      "patient_id": "248",
+      "truth_label": 1,
+      "truth_class": "abnormal",
+      "src_sample_rate": 4000,
+      "n_segments": 1,
+      "python_per_segment": [
+        0.9543
+      ],
+      "python_mean_prob": 0.9543,
+      "python_class": "abnormal",
+      "correct": true,
+      "label_fixed": false
+    },
+    {
+      "rn_filename": "13_physionet_abnormal_c0026_c0026_004.wav",
+      "source": "physionet",
+      "origin": "test_split",
+      "patient_id": "c0026",
+      "truth_label": 1,
+      "truth_class": "abnormal",
+      "src_sample_rate": 4000,
+      "n_segments": 1,
+      "python_per_segment": [
+        0.9496
+      ],
+      "python_mean_prob": 0.9496,
+      "python_class": "abnormal",
+      "correct": true,
+      "label_fixed": true
+    },
+    {
+      "rn_filename": "14_physionet_abnormal_c0009_c0009_005.wav",
+      "source": "physionet",
+      "origin": "test_split",
+      "patient_id": "c0009",
+      "truth_label": 1,
+      "truth_class": "abnormal",
+      "src_sample_rate": 4000,
+      "n_segments": 1,
+      "python_per_segment": [
+        0.6409
+      ],
+      "python_mean_prob": 0.6409,
+      "python_class": "abnormal",
+      "correct": true,
+      "label_fixed": true
+    },
+    {
+      "rn_filename": "15_physionet_normal_e01418_e01418_005.wav",
+      "source": "physionet",
+      "origin": "test_split",
+      "patient_id": "e01418",
+      "truth_label": 0,
+      "truth_class": "normal",
+      "src_sample_rate": 4000,
+      "n_segments": 1,
+      "python_per_segment": [
+        0.2286
+      ],
+      "python_mean_prob": 0.2286,
+      "python_class": "normal",
+      "correct": true,
+      "label_fixed": true
+    },
+    {
+      "rn_filename": "16_physionet_normal_e00378_e00378_001.wav",
+      "source": "physionet",
+      "origin": "test_split",
+      "patient_id": "e00378",
+      "truth_label": 0,
+      "truth_class": "normal",
+      "src_sample_rate": 4000,
+      "n_segments": 1,
+      "python_per_segment": [
+        0.0
+      ],
+      "python_mean_prob": 0.0,
+      "python_class": "normal",
+      "correct": true,
+      "label_fixed": true
+    },
+    {
+      "rn_filename": "17_yaseen_normal_yaseen_New_N_112_New_N_112_000.wav",
+      "source": "yaseen",
+      "origin": "test_split",
+      "patient_id": "yaseen_New_N_112",
+      "truth_label": 0,
+      "truth_class": "normal",
+      "src_sample_rate": 4000,
+      "n_segments": 1,
+      "python_per_segment": [
+        0.0016
+      ],
+      "python_mean_prob": 0.0016,
+      "python_class": "normal",
+      "correct": true,
+      "label_fixed": false
+    },
+    {
+      "rn_filename": "18_yaseen_normal_yaseen_New_N_055_New_N_055_000.wav",
+      "source": "yaseen",
+      "origin": "test_split",
+      "patient_id": "yaseen_New_N_055",
+      "truth_label": 0,
+      "truth_class": "normal",
+      "src_sample_rate": 4000,
+      "n_segments": 1,
+      "python_per_segment": [
+        0.0027
+      ],
+      "python_mean_prob": 0.0027,
+      "python_class": "normal",
+      "correct": true,
+      "label_fixed": false
+    },
+    {
+      "rn_filename": "19_yaseen_abnormal_yaseen_New_MR_128_New_MR_128_000.wav",
+      "source": "yaseen",
+      "origin": "test_split",
+      "patient_id": "yaseen_New_MR_128",
+      "truth_label": 1,
+      "truth_class": "abnormal",
+      "src_sample_rate": 4000,
+      "n_segments": 1,
+      "python_per_segment": [
+        1.0
+      ],
+      "python_mean_prob": 1.0,
+      "python_class": "abnormal",
+      "correct": true,
+      "label_fixed": false
+    },
+    {
+      "rn_filename": "20_yaseen_abnormal_yaseen_New_MVP_139_New_MVP_139_000.wav",
+      "source": "yaseen",
+      "origin": "test_split",
+      "patient_id": "yaseen_New_MVP_139",
+      "truth_label": 1,
+      "truth_class": "abnormal",
+      "src_sample_rate": 4000,
+      "n_segments": 1,
+      "python_per_segment": [
+        0.9982
+      ],
+      "python_mean_prob": 0.9982,
+      "python_class": "abnormal",
+      "correct": true,
+      "label_fixed": false
+    },
+    {
+      "rn_filename": "21_heart-sounds-public_normal_Normal.wav",
+      "source": "heart-sounds-public",
+      "origin": "external_holdout",
+      "patient_id": "external_Normal",
+      "truth_label": 0,
+      "truth_class": "normal",
+      "src_sample_rate": 44100,
+      "n_segments": 2,
+      "python_per_segment": [
+        0.9616,
+        0.8079
+      ],
+      "python_mean_prob": 0.8848,
+      "python_class": "abnormal",
+      "correct": false,
+      "label_fixed": false
+    },
+    {
+      "rn_filename": "22_heart-sounds-public_abnormal_Aortic-Stenosis.wav",
+      "source": "heart-sounds-public",
+      "origin": "external_holdout",
+      "patient_id": "external_Aortic-Stenosis",
+      "truth_label": 1,
+      "truth_class": "abnormal",
+      "src_sample_rate": 44100,
+      "n_segments": 2,
+      "python_per_segment": [
+        0.9984,
+        0.9995
+      ],
+      "python_mean_prob": 0.9989,
+      "python_class": "abnormal",
+      "correct": true,
+      "label_fixed": false
+    },
+    {
+      "rn_filename": "23_heart-sounds-public_abnormal_Aortic-Regurgitation.wav",
+      "source": "heart-sounds-public",
+      "origin": "external_holdout",
+      "patient_id": "external_Aortic-Regurgitation",
+      "truth_label": 1,
+      "truth_class": "abnormal",
+      "src_sample_rate": 44100,
+      "n_segments": 2,
+      "python_per_segment": [
+        0.9995,
+        0.9998
+      ],
+      "python_mean_prob": 0.9997,
+      "python_class": "abnormal",
+      "correct": true,
+      "label_fixed": false
+    },
+    {
+      "rn_filename": "24_heart-sounds-public_abnormal_Mitral-Regurgitation.wav",
+      "source": "heart-sounds-public",
+      "origin": "external_holdout",
+      "patient_id": "external_Mitral-Regurgitation",
+      "truth_label": 1,
+      "truth_class": "abnormal",
+      "src_sample_rate": 44100,
+      "n_segments": 2,
+      "python_per_segment": [
+        0.9996,
+        0.9999
+      ],
+      "python_mean_prob": 0.9997,
+      "python_class": "abnormal",
+      "correct": true,
+      "label_fixed": false
+    },
+    {
+      "rn_filename": "25_heart-sounds-public_abnormal_Mitral-Stenosis.wav",
+      "source": "heart-sounds-public",
+      "origin": "external_holdout",
+      "patient_id": "external_Mitral-Stenosis",
+      "truth_label": 1,
+      "truth_class": "abnormal",
+      "src_sample_rate": 44100,
+      "n_segments": 2,
+      "python_per_segment": [
+        0.9884,
+        0.9947
+      ],
+      "python_mean_prob": 0.9915,
+      "python_class": "abnormal",
+      "correct": true,
+      "label_fixed": false
+    },
+    {
+      "rn_filename": "26_heart-sounds-public_abnormal_Pulmonary-stenosis.wav",
+      "source": "heart-sounds-public",
+      "origin": "external_holdout",
+      "patient_id": "external_Pulmonary-stenosis",
+      "truth_label": 1,
+      "truth_class": "abnormal",
+      "src_sample_rate": 44100,
+      "n_segments": 2,
+      "python_per_segment": [
+        0.9995,
+        0.9998
+      ],
+      "python_mean_prob": 0.9997,
+      "python_class": "abnormal",
+      "correct": true,
+      "label_fixed": false
+    }
+  ]
+}
