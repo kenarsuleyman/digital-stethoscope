@@ -1,0 +1,19 @@
+{
+  "accuracy": 0.8918199955663932,
+  "sensitivity_recall": 0.8031687995124924,
+  "specificity": 0.9425087108013938,
+  "precision": 0.8887390424814565,
+  "f1_score": 0.8437900128040973,
+  "auc_roc": 0.9455991608753905,
+  "average_precision": 0.9287824772477119,
+  "threshold": 0.5,
+  "confusion_matrix": {
+    "tn": 2705,
+    "fp": 165,
+    "fn": 323,
+    "tp": 1318
+  },
+  "total_samples": 4511,
+  "positive_samples": 1641,
+  "negative_samples": 2870
+}
