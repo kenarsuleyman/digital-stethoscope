@@ -65,6 +65,18 @@ python -m src.deployment.convert_tflite --model-path /content/output/models/best
 
 `requirements.txt` pins TensorFlow to 2.15.*. Local stages 0–6 do not need TensorFlow at all (only NumPy/SciPy/librosa/soundfile/scikit-learn); installing TF locally is optional and often skipped because training happens on Colab.
 
+## Label fix (2026-10-20)
+
+PhysioNet 2016 REFERENCE.csv uses 1 = abnormal, -1 = normal. Until 2026-10-20 `config.yaml` mapped them the other way round,
+so every PhysioNet label in the CSV chain was inverted and the deployed model (thesis Table 4.x, 87.03 %) was trained on that.
+`scripts/fix_physionet_labels.py` rewrites the labels from REFERENCE.csv (checked against every .hea header; idempotent) and
+recomputes `class_weights.json`. `build_model.py` now has a Rescaling layer ([0,1] -> [-1,1]) in front of MobileNetV2, and
+`unfreeze_for_stage2` finds the base by name. Until v2 the augmentation in `augmentation.py` was never used in training.
+Since 2026-10-21 `train.py` (`make_augmenter`) applies the same four methods on the fly to the Mel images, scaled to
+pixels, when `training.augmentation.enabled` is true (v3); the notebook passes `aug_cfg` to `create_dataset`.
+Model versions: v1 = inverted labels (output_v1_ters_etiket on Drive), v2 = fixed labels, no augmentation
+(`output/v2_label_fix_20261021/`), v3 = fixed labels + augmentation.
+
 ## Things that look like bugs but aren't
 
 - `main.py` is a leftover PyCharm scaffold. The real entry points are the `python -m src...` modules. Don't treat `main.py` as a launcher.
