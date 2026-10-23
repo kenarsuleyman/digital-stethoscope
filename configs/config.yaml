@@ -112,3 +112,12 @@ training:
   early_stopping_patience: 7
   reduce_lr_patience: 3
   reduce_lr_factor: 0.5
+  # On-the-fly augmentation of the training Mel images (thesis 3.1.4; src/training/train.py make_augmenter).
+  # v2 (2026-10-21) was trained with enabled: false; v3 with enabled: true, everything else unchanged.
+  augmentation:
+    enabled: false             # v2 (deployed) = no augmentation; v3 (true) was evaluated and not selected
+    time_shift_prob: 0.5
+    time_shift_ms: 250          # +-1000 samples at 4 kHz
+    time_mask_frames: [5, 15]
+    freq_mask_bands: [2, 8]
+    amp_scale: [0.8, 1.2]

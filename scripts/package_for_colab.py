@@ -25,7 +25,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 
-def package(output_dir: Path, skip_zip: bool = False):
+def package(output_dir: Path, skip_zip: bool = False, zip_path: Path = None):
     output_dir.mkdir(parents=True, exist_ok=True)
 
     mel_dir = PROJECT_ROOT / "data" / "mel"
@@ -67,11 +67,13 @@ def package(output_dir: Path, skip_zip: bool = False):
         print("[ERROR] No .npy files found in data/mel/")
         return
 
-    zip_path = output_dir / "data.zip"
+    zip_path = zip_path or output_dir / "data.zip"
+    zip_path.parent.mkdir(parents=True, exist_ok=True)
     print(f"Zipping {len(npy_files)} mel files -> {zip_path}")
-    print("This may take several minutes for ~7GB of data...")
+    print("This may take several minutes (~17 GB of .npy -> ~5 GB zip)...")
 
-    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_STORED) as zf:
+    # Deflate: the 3 channels of every Mel image are identical copies, so the zip shrinks to ~30 %
+    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED, compresslevel=6) as zf:
         for i, npy in enumerate(npy_files):
             # Store as mel/<filename>.npy so unzip creates mel/ directory
             arcname = f"mel/{npy.name}"
@@ -109,9 +111,12 @@ def main():
                         help="Output directory (default: drive_upload/)")
     parser.add_argument("--skip-zip", action="store_true",
                         help="Skip creating data.zip (only copy src/configs/splits)")
+    parser.add_argument("--zip-path", type=Path, default=None,
+                        help="Where to write data.zip (default: <output-dir>/data.zip). "
+                             "Use a folder outside OneDrive to avoid syncing a multi-GB file.")
     args = parser.parse_args()
 
-    package(args.output_dir, args.skip_zip)
+    package(args.output_dir, args.skip_zip, args.zip_path)
 
 
 if __name__ == "__main__":

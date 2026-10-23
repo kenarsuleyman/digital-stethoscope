@@ -37,9 +37,48 @@ def load_split_data(split_csv: Path, project_root: Path):
     return paths, labels
 
 
+def make_augmenter(aug_cfg: dict, n_frames: int = 79, n_mels: int = 64, size: int = 224):
+    """On-the-fly augmentation of the precomputed 224x224 Mel images (thesis Section 3.1.4).
+
+    The methods of src/preprocessing/augmentation.py are applied in the image domain, scaled from Mel
+    frames / bands to pixels (5 s at 4 kHz with hop 256 = 79 frames over 224 px; 64 bands over 224 px):
+      - time shift with probability p, up to +/- time_shift_ms (zero fill at the edge)
+      - then one of: time mask (frames), frequency mask (bands), amplitude scaling, chosen at random
+    """
+    px_f = size / n_frames
+    px_b = size / n_mels
+    shift_px = int(round(aug_cfg["time_shift_ms"] / 1000 * 4000 / 256 * px_f))
+    tm = [int(round(v * px_f)) for v in aug_cfg["time_mask_frames"]]
+    fm = [int(round(v * px_b)) for v in aug_cfg["freq_mask_bands"]]
+    lo, hi = aug_cfg["amp_scale"]
+    p_shift = aug_cfg["time_shift_prob"]
+    idx = tf.range(size)
+
+    def time_shift(img):
+        s = tf.random.uniform((), -shift_px, shift_px + 1, dtype=tf.int32)
+        keep = tf.cast((idx >= s) & (idx < size + s), img.dtype)
+        return tf.roll(img, s, axis=1) * keep[None, :, None]
+
+    def band_mask(img, lmin, lmax, axis):
+        n = tf.random.uniform((), lmin, lmax + 1, dtype=tf.int32)
+        start = tf.random.uniform((), 0, size - n + 1, dtype=tf.int32)
+        m = 1.0 - tf.cast((idx >= start) & (idx < start + n), img.dtype)
+        return img * (m[None, :, None] if axis == 1 else m[:, None, None])
+
+    def augment(img, label):
+        img = tf.cond(tf.random.uniform(()) < p_shift, lambda: time_shift(img), lambda: img)
+        choice = tf.random.uniform((), 0, 3, dtype=tf.int32)
+        img = tf.switch_case(choice, [lambda: band_mask(img, tm[0], tm[1], axis=1),
+                                      lambda: band_mask(img, fm[0], fm[1], axis=0),
+                                      lambda: img * tf.random.uniform((), lo, hi)])
+        return tf.clip_by_value(img, 0.0, 1.0), label
+
+    return augment
+
+
 def create_dataset(paths: list, labels: list, batch_size: int,
-                   shuffle: bool = False, augment: bool = False) -> tf.data.Dataset:
-    """Create a tf.data.Dataset from .npy file paths and labels."""
+                   shuffle: bool = False, augment: bool = False, aug_cfg: dict = None) -> tf.data.Dataset:
+    """Create a tf.data.Dataset from .npy file paths and labels (augment: training set only)."""
 
     def load_npy(path_tensor, label):
         def _load(p):
@@ -56,6 +95,8 @@ def create_dataset(paths: list, labels: list, batch_size: int,
         ds = ds.shuffle(buffer_size=len(paths))
 
     ds = ds.map(load_npy, num_parallel_calls=tf.data.AUTOTUNE)
+    if augment:
+        ds = ds.map(make_augmenter(aug_cfg), num_parallel_calls=tf.data.AUTOTUNE)
     ds = ds.batch(batch_size)
     ds = ds.prefetch(tf.data.AUTOTUNE)
 
@@ -89,8 +130,11 @@ def train_model(data_dir: Path, output_dir: Path, config: dict):
     train_paths, train_labels = load_split_data(splits_dir / "train.csv", data_dir)
     val_paths, val_labels = load_split_data(splits_dir / "val.csv", data_dir)
 
-    train_ds = create_dataset(train_paths, train_labels, batch_size, shuffle=True)
+    aug_cfg = train_cfg.get("augmentation", {})
+    train_ds = create_dataset(train_paths, train_labels, batch_size, shuffle=True,
+                              augment=aug_cfg.get("enabled", False), aug_cfg=aug_cfg)
     val_ds = create_dataset(val_paths, val_labels, batch_size)
+    logger.info(f"Augmentation: {aug_cfg if aug_cfg.get('enabled') else 'off'}")
 
     logger.info(f"Train: {len(train_paths)} samples, Val: {len(val_paths)} samples")
 
