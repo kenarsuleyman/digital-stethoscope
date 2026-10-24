@@ -46,3 +46,7 @@ desktop.ini
 
 # ============ Colab ============
 *.zip
+
+# ============ Parity WAVs (clips of third-party datasets, not redistributed) ============
+test_parity/wavs/
+test_parity_v2/wavs/
