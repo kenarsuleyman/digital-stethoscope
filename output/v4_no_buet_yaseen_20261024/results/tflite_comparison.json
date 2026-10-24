@@ -1,0 +1,18 @@
+{
+  "keras": {
+    "accuracy": 0.7448459321658168,
+    "model_size_mb": 21.89177417755127,
+    "avg_inference_ms": 4.553922183020526
+  },
+  "tflite_fp16": {
+    "accuracy": 0.7439592108180004,
+    "model_size_mb": 4.307762145996094,
+    "avg_inference_ms": 8.582686828261494
+  },
+  "comparison": {
+    "prediction_agreement": 0.992019507869652,
+    "mean_abs_diff": 0.005146483425050974,
+    "max_abs_diff": 0.15169435739517212,
+    "size_reduction": "80.3%"
+  }
+}
