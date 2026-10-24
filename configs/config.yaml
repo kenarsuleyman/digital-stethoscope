@@ -112,6 +112,9 @@ training:
   early_stopping_patience: 7
   reduce_lr_patience: 3
   reduce_lr_factor: 0.5
+  # Datasets left out of training/validation (patient_id prefixes). v2/v3: none. v4 (advisor's review K2, dataset
+  # shortcut check): [buet, yaseen] -> configs/config_v4_no_buet_yaseen.yaml. Class weights are then recomputed.
+  exclude_datasets: []
   # On-the-fly augmentation of the training Mel images (thesis 3.1.4; src/training/train.py make_augmenter).
   # v2 (2026-10-21) was trained with enabled: false; v3 with enabled: true, everything else unchanged.
   augmentation:

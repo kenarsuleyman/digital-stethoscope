@@ -27,14 +27,29 @@ from tensorflow.keras.callbacks import (
 logger = logging.getLogger(__name__)
 
 
-def load_split_data(split_csv: Path, project_root: Path):
-    """Load mel .npy paths and labels from a split CSV."""
+def load_split_data(split_csv: Path, project_root: Path, exclude_datasets=None):
+    """Load mel .npy paths and labels from a split CSV.
+
+    exclude_datasets: dataset prefixes of patient_id to leave out (e.g. ["buet", "yaseen"]; training.exclude_datasets).
+    The patient-wise split itself is unchanged, the excluded patients are simply dropped from every split.
+    """
     with open(split_csv, "r", encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
+    if exclude_datasets:
+        prefixes = tuple(exclude_datasets)
+        rows = [r for r in rows if not r["patient_id"].startswith(prefixes)]
 
     paths = [str(project_root / r["mel_path"]) for r in rows]
     labels = [int(r["binary_label"]) for r in rows]
     return paths, labels
+
+
+def balanced_class_weights(labels: list) -> dict:
+    """Balanced class weights n / (2 n_c), as in configs/class_weights.json (sklearn 'balanced')."""
+    from sklearn.utils.class_weight import compute_class_weight
+    y = np.asarray(labels)
+    classes = np.unique(y)
+    return {int(c): float(w) for c, w in zip(classes, compute_class_weight("balanced", classes=classes, y=y))}
 
 
 def make_augmenter(aug_cfg: dict, n_frames: int = 79, n_mels: int = 64, size: int = 224):
@@ -119,16 +134,19 @@ def train_model(data_dir: Path, output_dir: Path, config: dict):
     train_cfg = config["training"]
     batch_size = train_cfg["batch_size"]
 
-    # Load class weights
-    weights_path = data_dir / "configs" / "class_weights.json"
-    with open(weights_path) as f:
-        class_weights = {int(k): v for k, v in json.load(f).items()}
-    logger.info(f"Class weights: {class_weights}")
-
     # Load data
-    logger.info("Loading datasets...")
-    train_paths, train_labels = load_split_data(splits_dir / "train.csv", data_dir)
-    val_paths, val_labels = load_split_data(splits_dir / "val.csv", data_dir)
+    exclude = train_cfg.get("exclude_datasets") or []
+    logger.info(f"Loading datasets... (excluded: {exclude or 'none'})")
+    train_paths, train_labels = load_split_data(splits_dir / "train.csv", data_dir, exclude)
+    val_paths, val_labels = load_split_data(splits_dir / "val.csv", data_dir, exclude)
+
+    # Class weights: the stored ones were computed on the full training split
+    if exclude:
+        class_weights = balanced_class_weights(train_labels)
+    else:
+        with open(data_dir / "configs" / "class_weights.json") as f:
+            class_weights = {int(k): v for k, v in json.load(f).items()}
+    logger.info(f"Class weights: {class_weights}")
 
     aug_cfg = train_cfg.get("augmentation", {})
     train_ds = create_dataset(train_paths, train_labels, batch_size, shuffle=True,
